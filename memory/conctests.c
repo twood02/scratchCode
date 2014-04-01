@@ -92,8 +92,7 @@ unsigned long long timedsleep(int millisleep) {
 
 int main()
 {
-  unsigned long long time;
-  unsigned long long timeFunc;
+  unsigned long long timer;
 
   // Intel doc says to run CPUID > 3 times at timer since it may be slow
   // the first few times you run it.
@@ -103,15 +102,15 @@ int main()
   standardIncLoop();
 
   printf("Time to sleep 1 second...\n");
-  time = timedsleep(1000);
+  timer = timedsleep(1000);
   printf("Cycles for 1000 msec sleep: %llu\n", time);
 
   printf("Running standard increment loop %d times\n", LOOPS);
-  time = standardIncLoop();
+  timer = standardIncLoop();
   printf("Cycles per iteration: %f\n", ((float)time)/LOOPS);
 
   printf("Running atomic increment loop %d times\n", LOOPS);
-  time = atomicIncLoop();
+  timer = atomicIncLoop();
   printf("Cycles per iteration: %f\n", ((float)time)/LOOPS);
 
 
