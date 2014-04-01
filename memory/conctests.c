@@ -11,7 +11,7 @@ volatile unsigned long long sharedInt=0;
 
 #define LOOPS 10000000
 
-
+/* Use the CPU cycle counter as a timer */
 static __attribute__((always_inline)) unsigned long long
 rdtsc (void)
 {
@@ -19,6 +19,9 @@ rdtsc (void)
   __asm__ volatile (".byte 0x0f, 0x31" : "=A" (x));
   return x;
 }
+/* Get the CPUID info. This forces the CPU to clear out the
+  pipeline, preventing rdtsc from running before other instructions.
+*/
 static __attribute__((always_inline)) void
 native_cpuid(unsigned int *eax, unsigned int *ebx,
                                 unsigned int *ecx, unsigned int *edx)
@@ -31,7 +34,7 @@ native_cpuid(unsigned int *eax, unsigned int *ebx,
         "=d" (*edx)
       : "0" (*eax), "2" (*ecx));
 }
-
+/* Combine both rdtsc and cpuid to make a safe time checker */
 static __attribute__((always_inline)) unsigned long long
 syncrdtsc (void)
 {
@@ -43,6 +46,7 @@ syncrdtsc (void)
   return t;
 }
 
+/* Update a shared global variable with no locking */
 unsigned long long standardIncLoop(){
   int i;
   unsigned long long timer;
@@ -59,6 +63,7 @@ unsigned long long standardIncLoop(){
   return timer;
 }
 
+/* Update a shared global variable with glib atomic update instruction */
 unsigned long long atomicIncLoop(){
   int i;
   unsigned long long timer;
@@ -75,6 +80,7 @@ unsigned long long atomicIncLoop(){
   return timer;
 }
 
+/* Measure the cylces needed to sleep for 1 second */
 unsigned long long timedsleep(int millisleep) {
   unsigned long long timer;
   timer = syncrdtsc();
