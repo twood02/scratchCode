@@ -13,6 +13,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/mman.h>
+#include <unistd.h>
 
 #ifndef SHM_HUGETLB
 #define SHM_HUGETLB 04000
@@ -39,7 +40,6 @@ int main(void)
         int shmid;
         unsigned long i;
         char *shmaddr;
-        char k;
 
         shmid = shmget(KEY, LENGTH, SHM_HUGETLB | IPC_CREAT | SHM_R | SHM_W);
         if (shmid < 0) {
@@ -64,8 +64,8 @@ int main(void)
         }
         dprintf("\n");
 
-        printf("wait for input... Go run readhp.c and then press a key...");
-        scanf ("%c", &k);
+        printf("sleeping for 60 seconds... Go run readhp.c!");
+        sleep(60);
 
         dprintf("Starting the Check...");
         for (i = 0; i < LENGTH; i++)

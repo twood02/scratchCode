@@ -46,7 +46,7 @@ int main(void)
                 perror("shmget");
                 exit(1);
         }
-        printf("shmid: 0x%x\n", shmid);
+        printf("key: %d shmid: 0x%x\n", KEY, shmid);
 
         shmaddr = shmat(shmid, ADDR, SHMAT_FLAGS);
         if (shmaddr == (char *)-1) {
@@ -69,8 +69,6 @@ int main(void)
                 shmctl(shmid, IPC_RMID, NULL);
                 exit(4);
         }
-
-        shmctl(shmid, IPC_RMID, NULL);
 
         return 0;
 }
