@@ -2,3 +2,6 @@
 conctests
 libs/*
 web-server/*
+reader
+writer
+
