@@ -6,10 +6,20 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 
+/* This code shows how to create a new file and then mmap it to put data
+   inside of it.  It creates the file in /hugepages, which should be where
+   you have setup your hugepagefs.
+   Running grep Huge /proc/meminfo should show that the equivalent of 20MB
+   of space has been used by the program.
+   When you are done delete the file manually.
+
+   Original code:
+   http://www.linuxquestions.org/questions/programming-9/mmap-tutorial-c-c-511265/
+*/
+
 #define FILEPATH "/hugepages/mmapped.bin"
-#define NUMINTS  (1000)
 #define FILESIZE 1024*1024*2*10
-//(NUMINTS * sizeof(int))
+#define NUMINTS FILESIZE/sizeof(int) -1
 
 int main(int argc, char *argv[])
 {
